@@ -1,11 +1,31 @@
-const musicalGenres = [
-  { name: "MPB", id: crypto.randomUUID() },
-  { name: "Sertanejo Brasil", id: crypto.randomUUID() },
-  { name: "Rádio FM", id: crypto.randomUUID() },
-  { name: "Radio Sertanejo Só Modão", id: crypto.randomUUID() },
-]
+import { useState, useEffect } from "react"
 
 const App = () => {
+  const [radios, setRadios] = useState([{}])
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await fetch(
+          "https://de1.api.radio-browser.info/json/stations/search?limit=10",
+        )
+        const data = await response.json()
+        console.log(data)
+        setRadios(
+          data.map(({ name, country }) => ({
+            id: crypto.randomUUID(),
+            stored: false,
+            name: name.replace("\t", ""),
+            country: country,
+          })),
+        )
+      } catch (error) {
+        console.log("Erro ao buscar dados da API:", error)
+      }
+    }
+    getData()
+  }, [])
+
   return (
     <div className="container">
       <aside className="aside">
@@ -25,7 +45,7 @@ const App = () => {
         </svg>
         <input type="text" className="input-search" placeholder="Search here" />
         <ul className="ul-genres">
-          {musicalGenres.map(({ name, id }) => (
+          {radios.map(({ name, id }) => (
             <li key={id} className="list-genres">
               <button className="button-gender-name">{name}</button>
             </li>

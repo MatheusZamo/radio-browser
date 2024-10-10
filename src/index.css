@@ -4,8 +4,9 @@
 
 .aside {
   background-color: #1e1e21;
-  width: 300px;
+  width: 350px;
   height: 100vh;
+  overflow-y: auto;
 }
 
 aside svg {
@@ -39,13 +40,13 @@ aside svg {
 }
 
 .button-gender-name {
-  width: 225px;
+  width: 245px;
   height: 40px;
   border: none;
   border-radius: 10px;
   background-color: #4d4d56;
+  font-size: 16px;
   color: white;
-  font-weight: bold;
   text-align: left;
   padding-left: 15px;
 }
