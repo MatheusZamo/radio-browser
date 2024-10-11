@@ -103,11 +103,12 @@ p {
   margin-left: 180px;
   margin-top: 30px;
   background-color: #4d4d56;
-  display: flex;
   border-radius: 20px;
-  overflow-y: auto;
 }
 
+.title-radios {
+  display: flex;
+}
 .name-station {
   font-size: 25px;
   font-weight: bolder;
@@ -115,16 +116,19 @@ p {
 }
 
 .list-station {
-  margin-top: 80px;
-  position: absolute;
   margin-left: 5px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
 }
 
 .list-radios {
   background-color: #62626c;
   margin-top: 10px;
-  width: 740px;
-  height: 50px;
+  margin-left: 25px;
+  width: 700px;
+  height: 70px;
   display: flex;
 }
 
@@ -143,21 +147,25 @@ p {
   background-color: #00000080;
   margin-top: 10px;
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .infos {
-  margin-left: 20px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
 }
 
 .icon-play {
-  margin-left: 6px;
-  margin-top: 5px;
-}
-
-.icons-edit {
-  margin-left: 650px;
   margin-top: 10px;
-  position: absolute;
+  margin-left: 10px;
+  width: 200px;
+  height: 30px;
+}
+.icons-edit {
+  margin-top: 10px;
+  margin-left: 70px;
 }
 
 .icon-pen {

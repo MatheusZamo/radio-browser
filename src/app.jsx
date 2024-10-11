@@ -13,11 +13,12 @@ const App = () => {
         const data = await response.json()
 
         setRadios(
-          data.map(({ name, country }) => ({
+          data.map(({ name, country, url_resolved }) => ({
             id: crypto.randomUUID(),
             stored: false,
             name: name.replace("\t", ""),
             country: country,
+            play: url_resolved,
           })),
         )
       } catch (error) {
@@ -114,41 +115,31 @@ const App = () => {
           </button>
         </div>
         <div className="stations">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="5em"
-            height="5em"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="#000000"
-              d="M8 6h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2"
-            ></path>
-          </svg>
-          <h2 className="name-station">Nome da Rádio atual</h2>
+          <div className="title-radios">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="5em"
+              height="5em"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#000000"
+                d="M8 6h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2"
+              ></path>
+            </svg>
+            <h2 className="name-station">Nome da Rádio atual</h2>
+          </div>
           <ul className="list-station">
             {savedRadios.length > 0 &&
-              savedRadios.map(({ name, id, country }) => (
+              savedRadios.map(({ name, id, country, play }) => (
                 <li key={id} className="list-radios">
-                  <div className="button-play">
-                    {" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1.5em"
-                      height="1.5em"
-                      viewBox="0 0 24 24"
-                      className="icon-play"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"
-                      ></path>
-                    </svg>
-                  </div>
                   <div className="infos">
                     <h2 className="title-radios-name">{name}</h2>
                     <span>{country}</span>
                   </div>
+                  <audio controls className="icon-play">
+                    <source src={play} type="audio/mpeg" />
+                  </audio>
                   <div className="icons-edit">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
