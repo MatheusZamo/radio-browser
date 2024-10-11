@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 
 const App = () => {
   const [radios, setRadios] = useState([{}])
+  const [savedRadios, setSavedRadios] = useState([])
 
   useEffect(() => {
     const getData = async () => {
@@ -10,7 +11,7 @@ const App = () => {
           "https://de1.api.radio-browser.info/json/stations/search?limit=10",
         )
         const data = await response.json()
-        console.log(data)
+
         setRadios(
           data.map(({ name, country }) => ({
             id: crypto.randomUUID(),
@@ -25,6 +26,18 @@ const App = () => {
     }
     getData()
   }, [])
+
+  useEffect(() => {
+    setSavedRadios(radios.filter((radio) => radio.stored))
+  }, [radios])
+
+  const handleClickSaveRadio = (id) => {
+    setRadios((preview) =>
+      preview.map((radio) =>
+        radio.id === id ? { ...radio, stored: !radio.stored } : radio,
+      ),
+    )
+  }
 
   return (
     <div className="container">
@@ -45,9 +58,29 @@ const App = () => {
         </svg>
         <input type="text" className="input-search" placeholder="Search here" />
         <ul className="ul-genres">
-          {radios.map(({ name, id }) => (
-            <li key={id} className="list-genres">
-              <button className="button-gender-name">{name}</button>
+          {radios.map(({ name, id, stored }) => (
+            <li
+              key={id}
+              className="list-genres"
+              onClick={() => handleClickSaveRadio(id)}
+            >
+              <span className="button-gender-name">{name}</span>
+              {stored ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="2em"
+                  height="2em"
+                  viewBox="0 0 24 24"
+                  className="icon-check"
+                >
+                  <path
+                    fill="#4e89e9"
+                    d="M9 16.17L4.83 12l-1.42 1.41L9 19L21 7l-1.41-1.41z"
+                  ></path>
+                </svg>
+              ) : (
+                ""
+              )}
             </li>
           ))}
         </ul>
@@ -86,54 +119,55 @@ const App = () => {
           </svg>
           <h2 className="name-station">Nome da Rádio atual</h2>
           <ul className="list-station">
-            {musicalGenres.map(({ name, id }) => (
-              <li key={id} className="list-radios">
-                <div className="button-play">
-                  {" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.5em"
-                    height="1.5em"
-                    viewBox="0 0 24 24"
-                    className="icon-play"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"
-                    ></path>
-                  </svg>
-                </div>
-                <div className="infos">
-                  <h2 className="title-radios-name">{name}</h2>
-                  <span>Brasil, BH</span>
-                </div>
-                <div className="icons-edit">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.8em"
-                    height="1.8em"
-                    viewBox="0 0 24 24"
-                    className="icon-pen"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="m11.4 18.161l7.396-7.396a10.3 10.3 0 0 1-3.326-2.234a10.3 10.3 0 0 1-2.235-3.327L5.839 12.6c-.577.577-.866.866-1.114 1.184a6.6 6.6 0 0 0-.749 1.211c-.173.364-.302.752-.56 1.526l-1.362 4.083a1.06 1.06 0 0 0 1.342 1.342l4.083-1.362c.775-.258 1.162-.387 1.526-.56q.647-.308 1.211-.749c.318-.248.607-.537 1.184-1.114m9.448-9.448a3.932 3.932 0 0 0-5.561-5.561l-.887.887l.038.111a8.75 8.75 0 0 0 2.092 3.32a8.75 8.75 0 0 0 3.431 2.13z"
-                    ></path>
-                  </svg>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="2em"
-                    height="2em"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"
-                    ></path>
-                  </svg>
-                </div>
-              </li>
-            ))}
+            {savedRadios.length > 0 &&
+              savedRadios.map(({ name, id }) => (
+                <li key={id} className="list-radios">
+                  <div className="button-play">
+                    {" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1.5em"
+                      height="1.5em"
+                      viewBox="0 0 24 24"
+                      className="icon-play"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="infos">
+                    <h2 className="title-radios-name">{name}</h2>
+                    <span>Brasil, BH</span>
+                  </div>
+                  <div className="icons-edit">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1.8em"
+                      height="1.8em"
+                      viewBox="0 0 24 24"
+                      className="icon-pen"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="m11.4 18.161l7.396-7.396a10.3 10.3 0 0 1-3.326-2.234a10.3 10.3 0 0 1-2.235-3.327L5.839 12.6c-.577.577-.866.866-1.114 1.184a6.6 6.6 0 0 0-.749 1.211c-.173.364-.302.752-.56 1.526l-1.362 4.083a1.06 1.06 0 0 0 1.342 1.342l4.083-1.362c.775-.258 1.162-.387 1.526-.56q.647-.308 1.211-.749c.318-.248.607-.537 1.184-1.114m9.448-9.448a3.932 3.932 0 0 0-5.561-5.561l-.887.887l.038.111a8.75 8.75 0 0 0 2.092 3.32a8.75 8.75 0 0 0 3.431 2.13z"
+                      ></path>
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="2em"
+                      height="2em"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z"
+                      ></path>
+                    </svg>
+                  </div>
+                </li>
+              ))}
           </ul>
         </div>
       </main>
