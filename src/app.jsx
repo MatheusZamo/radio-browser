@@ -34,7 +34,15 @@ const App = () => {
   const handleClickSaveRadio = (id) => {
     setRadios((preview) =>
       preview.map((radio) =>
-        radio.id === id ? { ...radio, stored: !radio.stored } : radio,
+        radio.id === id ? { ...radio, stored: true } : radio,
+      ),
+    )
+  }
+
+  const handleClickRemove = (id) => {
+    setRadios((preview) =>
+      preview.map((radio) =>
+        radio.id === id ? { ...radio, stored: false } : radio,
       ),
     )
   }
@@ -120,7 +128,7 @@ const App = () => {
           <h2 className="name-station">Nome da Rádio atual</h2>
           <ul className="list-station">
             {savedRadios.length > 0 &&
-              savedRadios.map(({ name, id }) => (
+              savedRadios.map(({ name, id, country }) => (
                 <li key={id} className="list-radios">
                   <div className="button-play">
                     {" "}
@@ -139,7 +147,7 @@ const App = () => {
                   </div>
                   <div className="infos">
                     <h2 className="title-radios-name">{name}</h2>
-                    <span>Brasil, BH</span>
+                    <span>{country}</span>
                   </div>
                   <div className="icons-edit">
                     <svg
@@ -159,6 +167,8 @@ const App = () => {
                       width="2em"
                       height="2em"
                       viewBox="0 0 24 24"
+                      className="icon-remove"
+                      onClick={() => handleClickRemove(id)}
                     >
                       <path
                         fill="currentColor"
